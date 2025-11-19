@@ -8,7 +8,6 @@ from PIL import Image
 import io
 import pickle
 import os
-import gdown
 
 app = Flask(__name__)
 CORS(app)
