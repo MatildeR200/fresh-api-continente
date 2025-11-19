@@ -13,14 +13,22 @@ import gdown
 app = Flask(__name__)
 CORS(app)
 
+import requests
+
 # URL do modelo no Google Drive
-MODEL_URL = "https://drive.google.com/uc?id=1ZfYQX4QQyco1GZtlm7g9lJv-rQQmvAnb"
+MODEL_ID = "1ZfYQX4QQyco1GZtlm7g9lJv-rQQmvAnb"
 MODEL_PATH = "modelo_fresh_continente.pth"
 
 # Baixar modelo se não existir
 if not os.path.exists(MODEL_PATH):
     print("📥 Baixando modelo do Google Drive...")
-    gdown.download(MODEL_URL, MODEL_PATH, quiet=False)
+    url = f"https://drive.google.com/uc?export=download&id={MODEL_ID}"
+    
+    response = requests.get(url, stream=True)
+    with open(MODEL_PATH, 'wb') as f:
+        for chunk in response.iter_content(chunk_size=8192):
+            f.write(chunk)
+    
     print("✓ Modelo baixado com sucesso!")
 
 # Carregar configurações
